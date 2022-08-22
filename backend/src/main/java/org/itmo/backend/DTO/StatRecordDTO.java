@@ -1,0 +1,18 @@
+package org.itmo.backend.DTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.sql.Date;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class StatRecordDTO {
+    private Long id;
+    private Date date;
+    private Long amount;
+}
