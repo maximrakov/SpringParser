@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Date;
 
-@Entity
+@Entity(name = "statRecord")
 @Getter
 @Setter
 @NoArgsConstructor

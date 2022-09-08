@@ -38,12 +38,16 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
-        String authorizationHeader = Arrays.stream(request.getCookies()).filter(e -> {
-            return e.getName().equals("jwt");
-        }).collect(Collectors.toList()).get(0).getValue();
-//                request.getHeader(jwtConfig.getAuthorizationHeader());
-
+        String authorizationHeader = null;
+        try {
+            authorizationHeader = Arrays.stream(request.getCookies()).filter(e -> {
+                return e.getName().equals("jwt");
+            }).collect(Collectors.toList()).get(0).getValue();
+        } catch (NullPointerException e) {
+            if(!Strings.isNullOrEmpty(request.getHeader("Authorization"))) {
+                authorizationHeader = request.getHeader("Authorization");
+            }
+        }
         if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
             filterChain.doFilter(request, response);
             return;

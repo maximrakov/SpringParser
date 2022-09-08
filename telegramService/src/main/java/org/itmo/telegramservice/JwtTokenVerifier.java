@@ -1,11 +1,10 @@
-package org.itmo;
+package org.itmo.telegramservice;
 
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import org.itmo.config.JwtConfig;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,13 +39,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-         List<Cookie> cookies= Arrays.stream(request.getCookies()).filter(e -> {
-             return e.getName().equals("jwt");
-         }).toList();
-        String authorizationHeader = null;
-         if(cookies.size() != 0) {
-             authorizationHeader = cookies.get(0).getValue();
-         }
+        String authorizationHeader = Arrays.stream(request.getCookies()).filter(e -> {
+            return e.getName().equals("jwt");
+        }).collect(Collectors.toList()).get(0).getValue();
 //                request.getHeader(jwtConfig.getAuthorizationHeader());
 
         if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {

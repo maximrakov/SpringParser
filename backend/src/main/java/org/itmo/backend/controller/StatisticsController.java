@@ -21,7 +21,6 @@ public class StatisticsController {
 
     @GetMapping("/current")
     public StatRecordDTO getCurrentStat() {
-
         StatRecord statRecord = statRecordService.getLastRecord();
         return new StatRecordDTO(statRecord.getId(),
                 statRecord.getDate(),
