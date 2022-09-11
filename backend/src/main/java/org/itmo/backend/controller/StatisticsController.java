@@ -1,22 +1,25 @@
 package org.itmo.backend.controller;
 
 import org.itmo.backend.DTO.StatRecordDTO;
+import org.itmo.backend.entity.ApplicationUser;
 import org.itmo.backend.entity.StatRecord;
+import org.itmo.backend.service.ApplicationUserService;
 import org.itmo.backend.service.StatRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class StatisticsController {
     StatRecordService statRecordService;
+    ApplicationUserService applicationUserService;
+
 
     @Autowired
-    public StatisticsController(StatRecordService statRecordService) {
+    public StatisticsController(ApplicationUserService applicationUserService, StatRecordService statRecordService) {
         this.statRecordService = statRecordService;
+        this.applicationUserService = applicationUserService;
     }
 
     @GetMapping("/current")
@@ -25,6 +28,12 @@ public class StatisticsController {
         return new StatRecordDTO(statRecord.getId(),
                 statRecord.getDate(),
                 statRecord.getAmount());
+    }
+
+
+    @PostMapping("/register")
+    public void register(@RequestBody ApplicationUser applicationUser) {
+        applicationUserService.save(applicationUser);
     }
 
     @GetMapping("/previousStat/{amount}")

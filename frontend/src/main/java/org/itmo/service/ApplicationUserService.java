@@ -1,5 +1,8 @@
 package org.itmo.service;
 
+import org.itmo.entity.ApplicationUser;
+import org.itmo.repository.ApplicationUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,9 +13,22 @@ import java.util.ArrayList;
 
 @Service
 public class ApplicationUserService implements UserDetailsService {
+    ApplicationUserRepository applicationUserRepository;
+
+    @Autowired
+    public ApplicationUserService(ApplicationUserRepository applicationUserRepository) {
+        this.applicationUserRepository = applicationUserRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User("ivan", "$2a$12$0f9oUToTvmvfgem3..pYNe2G9z6YGfwkheiNxW1v9xi5u.VkqUAQ.",new ArrayList<>());
+        return applicationUserRepository.findByUsername(username);
     }
+
+    public void save(ApplicationUser applicatioUser) {
+        applicationUserRepository.save(applicatioUser);
+    }
+
+
+
 }
